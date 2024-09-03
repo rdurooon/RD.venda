@@ -39,5 +39,4 @@ public class Estoque {
     public void rmQuant(){
         this.quant--;
     }
-    
 }

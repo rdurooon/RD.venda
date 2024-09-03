@@ -52,6 +52,7 @@ public class Main {
                     System.out.println("| " + show.getId() + " | " +  show.getProduto() + " | R$ " + show.getPreco() + " | " + show.getQuant());
                     }
                 }
+                
                 System.out.print("Insira o que deseja: ");
                 inputNum = scan.nextInt();
 
