@@ -1,5 +1,4 @@
 import java.util.Scanner;
-import java.nio.channels.Pipe.SourceChannel;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -235,6 +234,12 @@ public static void addItens(List<Estoque> estoque){
     est = new Estoque(6, "RTX 4060ti", 2800, 14);
     estoque.add(est);
     est = new Estoque(7, "Teclado Mecânico", 290, 14);
+    estoque.add(est);
+    est = new Estoque(8, "Mouse Gamer RGB", 180, 36);
+    estoque.add(est);
+    est = new Estoque(9, "SSD NvME M.2 1TB", 475, 9);
+    estoque.add(est);
+    est = new Estoque(10, "Gabinete Vidro Temperado", 310, 28);
     estoque.add(est);
 }
 }
