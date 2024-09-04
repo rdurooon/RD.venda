@@ -36,7 +36,10 @@ public class Estoque {
     public void setQuant(int quant) {
         this.quant = quant;
     }
-    public void rmQuant(){
-        this.quant--;
+    public void rmQuant(int quant){
+        this.quant -= quant;
+    }
+    public void addQuant(int quant) {
+        this.quant += quant;
     }
 }

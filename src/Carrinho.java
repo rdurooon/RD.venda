@@ -1,10 +1,12 @@
 public class Carrinho {
     private Cliente cliente;
     private Estoque produto;
+    private int quant;
     
-    public Carrinho(Cliente cliente, Estoque produto) {
+    public Carrinho(Cliente cliente, Estoque produto, int quant) {
         this.cliente = cliente;
         this.produto = produto;
+        this.quant = quant;
     }
     
     public Cliente getCliente() {
@@ -18,5 +20,17 @@ public class Carrinho {
     }
     public void setProduto(Estoque produto) {
         this.produto = produto;
+    }
+    public int getQuant() {
+        return quant;
+    }
+    public void setQuant(int quant) {
+        this.quant = quant;
+    }
+    public void rmQuant(int quant) {
+        this.quant -= quant;
+    }
+    public void addQuant(int quant) {
+        this.quant += quant;
     }
 }
