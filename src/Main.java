@@ -5,8 +5,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Calendar;
+import java.text.SimpleDateFormat;
 
-public class Main {
+public class Main{
 
     public static Scanner scan = new Scanner(System.in);
     public static void main(String[] args) {
@@ -185,12 +186,14 @@ public class Main {
 
                 break;
                 case 4:
+                //Comprar carrinho
                 System.out.println("Esses são os itens presente no seu carrinho: ");
                 total = 0;
                 for(Carrinho show : carrinho){
                     System.out.println("| " + show.getProduto().getProduto() + " | " + show.getQuant() + "x");
                     total += show.getProduto().getPreco() * show.getQuant();
                 }
+                System.out.println("| Total: R$ " + total);
                 while(true){
                 System.out.print("Deseja comprar?\n| 1 - Sim\n| 2 - Não\nInsira o que deseja: ");
                 inputNum = scan.nextInt();
@@ -227,8 +230,8 @@ public class Main {
         }
     }
     
-    public static void addItens(List<Estoque> estoque){
-        Estoque est = new Estoque(1, "Cadeira Gamer RGB", 750, 23);
+public static void addItens(List<Estoque> estoque){
+    Estoque est = new Estoque(1, "Cadeira Gamer RGB", 750, 23);
     estoque.add(est);
     est = new Estoque(2, "Fonte 750w", 480, 2);
     estoque.add(est);
@@ -251,14 +254,17 @@ public class Main {
 }
 public static void emitirNota(List<Carrinho> carrinho, Cliente cliente, double total){
     try {
+        //Declarar instancias
         FileWriter nota = new FileWriter("notafiscal.txt");
-        Calendar calendar = Calendar.getInstance();
-        Date dataAtul = calendar.getTime();
+        Calendar calendar = Calendar.getInstance(); Date dataAtul = calendar.getTime();
+        SimpleDateFormat formatBR = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"); String dataFormat = formatBR.format(dataAtul);
+
+        //Emitir nota fiscal
         nota.write("|| Nota fiscal:\n| Cliente: " + cliente.getNome() + "\n| Email: " + cliente.getEmail() + "\n\nItens comprados: ");
         for(Carrinho show : carrinho){
             nota.write("\n| " + show.getProduto().getProduto() + " | " + show.getQuant() + "x");
         }
-        nota.write("| Total: R$ " + total + "\n\nSistema de Venda || Emitido em: " + dataAtul);
+        nota.write("| Total: R$ " + total + "\n\nSistema de Venda desenvolvido por @rdurooon || Emitido em: " + dataFormat);
         nota.close();
     } catch (IOException e) {
         e.printStackTrace();
