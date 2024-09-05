@@ -40,7 +40,7 @@ public class Main{
         System.out.println("Bem vindo " + nome + " | Saldo: " + cliente.getSaldo());
         
         while(true){
-            System.out.print("\nO que deseja?\n| 1 - Adicionar item\n| 2 - Remover item\n| 3 - Ver carrinho\n| 4 - Comprar carrinho\n| 5 - Sair\nInsira o que deseja: ");
+            System.out.print("\nO que deseja?\n| 1 - Adicionar item\n| 2 - Remover item\n| 3 - Ver carrinho\n| 4 - Ver estoque\n| 5 - Comprar carrinho\n| 6 - Sair\nInsira o que deseja: ");
             int inputNum = scan.nextInt();
             int quant = 0;
             switch (inputNum) {
@@ -186,6 +186,14 @@ public class Main{
 
                 break;
                 case 4:
+                //Mostrar estoque
+                System.out.println("Esses são os itens do estoque:\n===============================================");
+                for(Estoque show : estoque){
+                    System.out.println("| Nome: " + show.getProduto() + "\n| Preço: R$ " + show.getPreco() + "\n| Quantidade: " + show.getQuant() + "x\n===============================================");
+                }
+
+                break;
+                case 5:
                 //Comprar carrinho
                 System.out.println("Esses são os itens presente no seu carrinho: ");
                 total = 0;
@@ -219,7 +227,7 @@ public class Main{
                     break;
                 }
                 break;
-                case 5:
+                case 6:
                 //Sair do sistema
                 System.out.println("Obrigado por usar nosso sistema :)");
                 scan.close();
@@ -254,20 +262,23 @@ public static void addItens(List<Estoque> estoque){
 }
 public static void emitirNota(List<Carrinho> carrinho, Cliente cliente, double total){
     try {
-        //Declarar instancias
         FileWriter nota = new FileWriter("notafiscal.txt");
-        Calendar calendar = Calendar.getInstance(); Date dataAtul = calendar.getTime();
-        SimpleDateFormat formatBR = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"); String dataFormat = formatBR.format(dataAtul);
-
         //Emitir nota fiscal
         nota.write("|| Nota fiscal:\n| Cliente: " + cliente.getNome() + "\n| Email: " + cliente.getEmail() + "\n\nItens comprados: ");
         for(Carrinho show : carrinho){
             nota.write("\n| " + show.getProduto().getProduto() + " | " + show.getQuant() + "x");
         }
-        nota.write("| Total: R$ " + total + "\n\nSistema de Venda desenvolvido por @rdurooon || Emitido em: " + dataFormat);
+        nota.write("| Total: R$ " + total + "\n\nSistema de Venda desenvolvido por @rdurooon || Emitido em: " + dataCorrigida());
         nota.close();
     } catch (IOException e) {
         e.printStackTrace();
     }
 }
+public static String dataCorrigida(){
+    Calendar calendar = Calendar.getInstance(); 
+    Date dataAtul = calendar.getTime();
+    SimpleDateFormat formatBR = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"); 
+    String dataFormatada = formatBR.format(dataAtul);
+    return dataFormatada;
+} 
 }
