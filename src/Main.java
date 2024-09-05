@@ -1,6 +1,10 @@
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Date;
+import java.util.Calendar;
 
 public class Main {
 
@@ -184,7 +188,7 @@ public class Main {
                 System.out.println("Esses são os itens presente no seu carrinho: ");
                 total = 0;
                 for(Carrinho show : carrinho){
-                    System.out.println("| " + show.getProduto().getProduto() + " | " + show.getQuant());
+                    System.out.println("| " + show.getProduto().getProduto() + " | " + show.getQuant() + "x");
                     total += show.getProduto().getPreco() * show.getQuant();
                 }
                 while(true){
@@ -196,16 +200,19 @@ public class Main {
                                 System.out.println("Você não tem saldo para compra :(");
                                 break;
                             }
+
+                            emitirNota(carrinho, cliente, total);
+
                             carrinho.clear();
                             cliente.rmSaldo(total);
-                            System.out.println("\nCompra efetuado com sucesso!\nSaldo restante: " + cliente.getSaldo());
-
+                            System.out.printf("\nCompra efetuado com sucesso!\nNota fiscal enviada ao email '%s'\nSaldo restante: %.2f \n", cliente.getEmail(), cliente.getSaldo());
+                            
                             break;
-                        case 2:
+                            case 2:
                             break;
-                        default:
+                            default:
                             System.out.print("Insira um valor valido!: ");
-                    }
+                        }
                     break;
                 }
                 break;
@@ -219,9 +226,9 @@ public class Main {
             }
         }
     }
-
-public static void addItens(List<Estoque> estoque){
-    Estoque est = new Estoque(1, "Cadeira Gamer RGB", 750, 23);
+    
+    public static void addItens(List<Estoque> estoque){
+        Estoque est = new Estoque(1, "Cadeira Gamer RGB", 750, 23);
     estoque.add(est);
     est = new Estoque(2, "Fonte 750w", 480, 2);
     estoque.add(est);
@@ -241,5 +248,20 @@ public static void addItens(List<Estoque> estoque){
     estoque.add(est);
     est = new Estoque(10, "Gabinete Vidro Temperado", 310, 28);
     estoque.add(est);
+}
+public static void emitirNota(List<Carrinho> carrinho, Cliente cliente, double total){
+    try {
+        FileWriter nota = new FileWriter("notafiscal.txt");
+        Calendar calendar = Calendar.getInstance();
+        Date dataAtul = calendar.getTime();
+        nota.write("|| Nota fiscal:\n| Cliente: " + cliente.getNome() + "\n| Email: " + cliente.getEmail() + "\n\nItens comprados: ");
+        for(Carrinho show : carrinho){
+            nota.write("\n| " + show.getProduto().getProduto() + " | " + show.getQuant() + "x");
+        }
+        nota.write("| Total: R$ " + total + "\n\nSistema de Venda || Emitido em: " + dataAtul);
+        nota.close();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
 }
 }
