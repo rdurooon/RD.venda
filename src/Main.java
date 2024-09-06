@@ -10,6 +10,8 @@ import java.text.SimpleDateFormat;
 public class Main{
 
     public static Scanner scan = new Scanner(System.in);
+    public static String cpf = ""; 
+    public static String cnpj = "";
     public static void main(String[] args) {
         //Inciar essenciais e listas
         List<Estoque> estoque = new ArrayList<>();
@@ -19,7 +21,8 @@ public class Main{
         int count = 0;
         int total = 0;
         int quant = 0;
-
+        int inputNum;
+        
         //Adicionar itens ao estoque
         addItens(estoque);
         
@@ -29,15 +32,35 @@ public class Main{
         String nome = scan.nextLine();
         System.out.print("| Email: ");
         String email = scan.nextLine();
-        
         if(email.equals("")){
-            listCliente.add(cliente = new Cliente(0, nome, "generic@email.com", 5000));
+            email = "generic@email.com";
+        }
+        System.out.print("| Você uma pessoa:\n! 1 - Física\n| 2 - Jurídica\nInsira o que deseja: ");
+        inputNum = scan.nextInt();
+        scan.nextLine();
+
+        do{
+        switch (inputNum) {
+            case 1:
+                System.out.print("| CPF: ");
+                cpf = scan.nextLine();
+                break;
+            case 2:
+                System.out.print("| CNPJ: ");
+                cnpj = scan.nextLine();
+                break;
+            default:
+                System.out.print("Insira um valor válido: ");
+        }
+        } while (inputNum != 1 && inputNum != 2);
+
+        if(!cpf.equals("")){
+            listCliente.add(cliente = new PessoaF(0, nome, email, 5000, cpf));
         } else {
-            listCliente.add(cliente = new Cliente(0, nome, email, 5000));
+            listCliente.add(cliente = new PessoaJ(0, nome, email, 5000, cnpj));
         }
         
-        System.out.println("- Bem vindo " + nome + "\n- Saldo: " + cliente.getSaldo());
-        int inputNum;
+        System.out.println("\n- Bem vindo " + nome + "\n- Saldo: " + cliente.getSaldo());
 
         do{
             System.out.print("\nO que deseja?\n| 1 - Adicionar item\n| 2 - Remover item\n| 3 - Ver carrinho\n| 4 - Ver estoque\n| 5 - Efetuar compra\n| 0 - Sair\nInsira o que deseja: ");
@@ -83,7 +106,7 @@ public class Main{
                             if(busca.getId() == carrinho.get(i).getProduto().getId() && !finaled){
                                 carrinho.get(i).addQuant(quant);
                                 busca.rmQuant(quant);
-                                System.out.println("X " + busca.getProduto() + " acrescentado ao carrinho!");
+                                System.out.println("\nX " + busca.getProduto() + " acrescentado ao carrinho!");
                                 add = true;
                                 break;
                             }
@@ -129,18 +152,16 @@ public class Main{
                     carrinho.clear();
                     System.out.println("Todos os itens foram removidos!");
                     break;
-                } else {
-                    inputNum--;
-                }
-
-
-                for(int i = 1; i < carrinho.size(); i++){
+                } 
+                    
+                inputNum--;
+                for(int i = 0; i < carrinho.size(); i++){
                     if(inputNum == i){
                         while(true){
                             System.out.print("Insira a quantidade a ser removida: ");
                             quant = scan.nextInt();
                             if(quant <= carrinho.get(i).getQuant()){
-                                System.out.println(quant + " itens removidos.");
+                                System.out.println("\n" + quant + " itens removidos.");
                                 removed = true;
                                 break;
                             } else {
@@ -151,19 +172,17 @@ public class Main{
                         carrinho.get(i).rmQuant(quant);
                         estoque.get(carrinho.get(i).getProduto().getId() - 1).addQuant(quant);
 
-                        if(carrinho.get(i).getQuant() <= 0){
+                        if(carrinho.get(inputNum).getQuant() <= 0){
                             System.out.println("Item removido com sucesso!");
                             removed = true;
-                            carrinho.remove(i);
+                            carrinho.remove(inputNum);
                         }
-                        break;
                     }
                 }
                 
                 if(!removed){
                     System.out.println("\nNão foi possível remover o item :(");
                 }
-                
                 break;
                 case 3:
                 //Mostrar carrinho
@@ -193,6 +212,11 @@ public class Main{
                 break;
                 case 5:
                 //Efetuar compra
+                if(carrinho.isEmpty()){
+                    System.out.println("\nVocê não tem itens no carrinho :(");
+                    break;
+                }
+
                 System.out.println("Esses são os itens presente no seu carrinho: ");
                 total = 0;
                 for(Carrinho show : carrinho){
@@ -222,18 +246,19 @@ public class Main{
                             default:
                             System.out.print("Insira um valor valido!: ");
                         }
-                    break;
+                        break;
                 }
                 break;
                 case 0:
                 //Sair do sistema
+                inputNum = -1;
                 System.out.println("Obrigado por usar nosso sistema :)");
                 scan.close();
                 return;
                 default:
                 System.out.println("Insira um valor válido!");
             }
-        } while (inputNum != 0);
+        } while (inputNum != -1);
     }
     
 public static void addItens(List<Estoque> estoque){
@@ -262,11 +287,17 @@ public static void emitirNota(List<Carrinho> carrinho, Cliente cliente, double t
     try {
         FileWriter nota = new FileWriter("notafiscal.txt");
         //Emitir nota fiscal
-        nota.write("|| Nota fiscal:\n| Cliente: " + cliente.getNome() + "\n| Email: " + cliente.getEmail() + "\n\nItens comprados: ");
-        for(Carrinho show : carrinho){
-            nota.write("\n| " + show.getProduto().getProduto() + " | " + show.getQuant() + "x");
+        nota.write("|| Nota fiscal:\n| Cliente: " + cliente.getNome() + "\n");
+        if(!cpf.equals("")){
+            nota.write("| CPF: " + cliente.getDocumento());
+        } else {
+            nota.write("| CNPJ: " + cliente.getDocumento());
         }
-        nota.write("| Total: R$ " + total + "\n\nSistema de Venda desenvolvido por @rdurooon || Emitido em: " + dataCorrigida());
+        nota.write("\n| Email: " + cliente.getEmail() + "\n\nItens comprados: ");
+        for(Carrinho show : carrinho){
+            nota.write("\n| " + show.getProduto().getProduto() + " | " + show.getQuant() + "x |");
+        }
+        nota.write("\n| Total: R$ " + total + "\n\nEmitido em: " + dataCorrigida() + "\n\n[ Sitema de Vendas ] feito por @rdurooon");
         nota.close();
     } catch (IOException e) {
         e.printStackTrace();

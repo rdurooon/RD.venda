@@ -3,7 +3,8 @@ public class Cliente {
     private String nome;
     private String email;
     private double saldo;
-    
+    private String tipoCliente;
+
     public Cliente(int id, String nome, String email, double saldo) {
         this.id = id;
         this.nome = nome;
@@ -37,5 +38,8 @@ public class Cliente {
     }
     public void rmSaldo(double total) {
         this.saldo -= total;
+    }
+    public String getDocumento() {
+        return this.tipoCliente;
     }
 }
