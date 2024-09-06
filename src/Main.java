@@ -18,31 +18,31 @@ public class Main{
         Cliente cliente;
         int count = 0;
         int total = 0;
+        int quant = 0;
 
         //Adicionar itens ao estoque
         addItens(estoque);
         
         //Inicio
-        //Cadastro de usuario
-        System.out.print("Olá! Cadastre-se para utilizar nosso sistema:\n| Nome: ");
+        //Cadastro de usuário
+        System.out.print("\nOlá! Cadastre-se para utilizar nosso sistema:\n| Nome: ");
         String nome = scan.nextLine();
         System.out.print("| Email: ");
         String email = scan.nextLine();
         
         if(email.equals("")){
-            email = "generic@email.com";
-            cliente = new Cliente(0, nome, email, 5000);
+            listCliente.add(cliente = new Cliente(0, nome, "generic@email.com", 5000));
         } else {
-            cliente = new Cliente(0, nome, email, 5000);
+            listCliente.add(cliente = new Cliente(0, nome, email, 5000));
         }
-        listCliente.add(cliente);
         
-        System.out.println("Bem vindo " + nome + " | Saldo: " + cliente.getSaldo());
-        
-        while(true){
-            System.out.print("\nO que deseja?\n| 1 - Adicionar item\n| 2 - Remover item\n| 3 - Ver carrinho\n| 4 - Ver estoque\n| 5 - Comprar carrinho\n| 6 - Sair\nInsira o que deseja: ");
-            int inputNum = scan.nextInt();
-            int quant = 0;
+        System.out.println("- Bem vindo " + nome + "\n- Saldo: " + cliente.getSaldo());
+        int inputNum;
+
+        do{
+            System.out.print("\nO que deseja?\n| 1 - Adicionar item\n| 2 - Remover item\n| 3 - Ver carrinho\n| 4 - Ver estoque\n| 5 - Efetuar compra\n| 0 - Sair\nInsira o que deseja: ");
+            inputNum = scan.nextInt();
+
             switch (inputNum) {
                 case 1:
                 //Adicionar item
@@ -55,15 +55,14 @@ public class Main{
                     
                 System.out.print("Insira o que deseja: ");
                 inputNum = scan.nextInt();
+
                 boolean finaled = false;
                 boolean add = false;
 
                 for(Estoque busca : estoque){
-                    if(busca.getQuant() == 0){
-                        if(inputNum == busca.getId()){
+                    if(busca.getQuant() == 0 && inputNum == busca.getId()){
                             finaled = true;
                             break;
-                        }
                     }
 
                     if(inputNum == busca.getId() && !finaled){
@@ -84,16 +83,15 @@ public class Main{
                             if(busca.getId() == carrinho.get(i).getProduto().getId() && !finaled){
                                 carrinho.get(i).addQuant(quant);
                                 busca.rmQuant(quant);
-                                System.out.println("znX " + busca.getProduto() + " adicionado ao carrinho!");
+                                System.out.println("X " + busca.getProduto() + " acrescentado ao carrinho!");
                                 add = true;
                                 break;
                             }
                         }
 
                         if(!add && !finaled){
-                            Carrinho car = new Carrinho(cliente, busca, quant);
                             busca.rmQuant(quant);
-                            carrinho.add(car);
+                            carrinho.add(new Carrinho(cliente, busca, quant));
                             System.out.println("\nX " + busca.getProduto() + " adicionado ao carrinho!");
                             add = true;
                         }
@@ -136,7 +134,7 @@ public class Main{
                 }
 
 
-                for(int i = 0; i < carrinho.size(); i++){
+                for(int i = 1; i < carrinho.size(); i++){
                     if(inputNum == i){
                         while(true){
                             System.out.print("Insira a quantidade a ser removida: ");
@@ -194,7 +192,7 @@ public class Main{
 
                 break;
                 case 5:
-                //Comprar carrinho
+                //Efetuar compra
                 System.out.println("Esses são os itens presente no seu carrinho: ");
                 total = 0;
                 for(Carrinho show : carrinho){
@@ -227,7 +225,7 @@ public class Main{
                     break;
                 }
                 break;
-                case 6:
+                case 0:
                 //Sair do sistema
                 System.out.println("Obrigado por usar nosso sistema :)");
                 scan.close();
@@ -235,7 +233,7 @@ public class Main{
                 default:
                 System.out.println("Insira um valor válido!");
             }
-        }
+        } while (inputNum != 0);
     }
     
 public static void addItens(List<Estoque> estoque){
