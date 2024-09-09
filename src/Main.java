@@ -1,10 +1,11 @@
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Date;
 import java.util.Calendar;
+import java.util.Random;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 
 public class Main{
@@ -63,7 +64,7 @@ public class Main{
         System.out.println("\n- Bem vindo " + nome + "\n- Saldo: " + cliente.getSaldo());
 
         do{
-            System.out.print("\nO que deseja?\n| 1 - Adicionar item\n| 2 - Remover item\n| 3 - Ver carrinho\n| 4 - Ver estoque\n| 5 - Efetuar compra\n| 0 - Sair\nInsira o que deseja: ");
+            System.out.print("\nO que deseja?\n| 1 - Adicionar item\n| 2 - Remover item\n| 3 - Ver carrinho\n| 4 - Ver estoque\n| 5 - Efetuar compra\n| 6 - Validar nota fiscal\n| 0 - Sair\nInsira o que deseja: ");
             inputNum = scan.nextInt();
 
             switch (inputNum) {
@@ -249,6 +250,19 @@ public class Main{
                         break;
                 }
                 break;
+                case 6:
+                //Validar nota fiscal
+                Scanner stringScan = new Scanner(System.in);
+                System.out.print("\nO código deve estar nessa condições:\n| Após a data e hora de emissão\n| Ser um valor de 9 dígitos\nInsira o código: ");
+                String codigo = stringScan.nextLine().trim().toLowerCase();
+
+                if(codigoValidar(codigo)){
+                    System.out.println("O código é valido!");
+                } else {
+                    System.out.println("O código é invalido. Entre em cotado conosco para averiguar compra!");
+                }
+                
+                break;
                 case 0:
                 //Sair do sistema
                 inputNum = -1;
@@ -297,7 +311,7 @@ public static void emitirNota(List<Carrinho> carrinho, Cliente cliente, double t
         for(Carrinho show : carrinho){
             nota.write("\n| " + show.getProduto().getProduto() + " | " + show.getQuant() + "x |");
         }
-        nota.write("\n| Total: R$ " + total + "\n\nEmitido em: " + dataCorrigida() + "\n\n[ Sitema de Vendas ] feito por @rdurooon");
+        nota.write("\n| Total: R$ " + total + "\n\nEmitido em: " + dataCorrigida() + " || Código: " + codigoCriar() +"\n\n[Sitema de Vendas] feito por @rdurooon");
         nota.close();
     } catch (IOException e) {
         e.printStackTrace();
@@ -309,5 +323,40 @@ public static String dataCorrigida(){
     SimpleDateFormat formatBR = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"); 
     String dataFormatada = formatBR.format(dataAtul);
     return dataFormatada;
-} 
+}
+public static String codigoCriar(){
+    int soma = 0;
+    Random rng = new Random();
+    StringBuilder sb = new StringBuilder();
+    int[] numbers = new int[9];
+
+    do{
+        soma = 0;
+        for(int i = 0; i < numbers.length; i++){
+            numbers[i] = rng.nextInt(10);
+            soma += numbers[i];
+        }
+    } while (soma != 25);
+
+    for(int num : numbers){
+        sb.append(num);
+    }
+    
+    String codigoCriado = sb.toString();
+
+    return codigoCriado;
+}
+public static boolean codigoValidar(String codigo){
+    int soma = 0;
+    codigo.trim();
+    for(char num : codigo.toCharArray()){
+        soma += Character.getNumericValue(num);
+    }
+
+    if(soma == 25){
+        return true;
+    } else {
+        return false;
+    }
+}
 }
