@@ -14,18 +14,21 @@ public class Main{
     public static String cpf = ""; 
     public static String cnpj = "";
     public static void main(String[] args) {
+        
         //Inciar essenciais e listas
         List<Estoque> estoque = new ArrayList<>();
         List<Carrinho> carrinho = new ArrayList<>();
         List<Cliente> listCliente = new ArrayList<>();
+        List<String> cupons = new ArrayList<>();
         Cliente cliente;
         int count = 0;
         int total = 0;
         int quant = 0;
         int inputNum;
         
-        //Adicionar itens ao estoque
+        //Adicionar itens ao estoque e cupons
         addItens(estoque);
+        addCupons(cupons);
         
         //Inicio
         //Cadastro de usuário
@@ -299,6 +302,23 @@ public static void addItens(List<Estoque> estoque){
     est = new Estoque(10, "Gabinete Vidro Temperado", 310, 28);
     estoque.add(est);
 }
+public static void addCupons(List<String> cupons){
+    Random rng = new Random();
+    StringBuilder sb = new StringBuilder();
+    
+    for(int x = 0; x < 3; x++){
+        sb.setLength(0);
+        for(int i = 0; i < 3; i++){
+            int num = rng.nextInt(9) + 1;
+            sb.append(num);
+            if(i == 1 || i == 2){
+                char letra = (Character.toUpperCase((char) (rng.nextInt(25) + 97)));
+                sb.append(letra);
+            }
+        }
+        cupons.add(sb.toString());
+    }
+}
 public static void emitirNota(List<Carrinho> carrinho, Cliente cliente, double total){
     try {
         FileWriter nota = new FileWriter("notafiscal.txt");
@@ -341,15 +361,15 @@ public static String codigoCriar(){
                 somafinal += numbers[i]; 
             }
         }
-        somafinal *= 2;
+        somafinal *= 3;
+        System.out.println(soma + " | " + somafinal);
     } while (soma != somafinal);
 
     for(int num : numbers){
         sb.append(num);
     }
-    String codigoCriado = sb.toString();
-
-    return codigoCriado;
+    System.out.println(sb.toString());
+    return sb.toString();
 }
 public static boolean codigoValidar(String codigo){
     if(codigo.length() != 9){
@@ -367,9 +387,8 @@ public static boolean codigoValidar(String codigo){
             somafinal += num;
         }
     }
-    somafinal *= 2;
 
-    return soma == somafinal;
+    return soma == somafinal * 3;
 }
 public static String formatarDocumento(String documento){
     if(documento.length() == 11){
