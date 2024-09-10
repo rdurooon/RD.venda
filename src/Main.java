@@ -2,10 +2,10 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
-import java.util.Calendar;
 import java.util.Random;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 public class Main{
@@ -14,8 +14,6 @@ public class Main{
     public static String cpf = ""; 
     public static String cnpj = "";
     public static void main(String[] args) {
-        codigoCriar();
-
         //Inciar essenciais e listas
         List<Estoque> estoque = new ArrayList<>();
         List<Carrinho> carrinho = new ArrayList<>();
@@ -47,10 +45,12 @@ public class Main{
             case 1:
                 System.out.print("| CPF: ");
                 cpf = scan.nextLine();
+                cpf = formatarDocumento(cpf);
                 break;
             case 2:
                 System.out.print("| CNPJ: ");
                 cnpj = scan.nextLine();
+                cnpj = formatarDocumento(cnpj);
                 break;
             default:
                 System.out.print("Insira um valor válido: ");
@@ -320,11 +320,9 @@ public static void emitirNota(List<Carrinho> carrinho, Cliente cliente, double t
     }
 }
 public static String dataCorrigida(){
-    Calendar calendar = Calendar.getInstance(); 
-    Date dataAtul = calendar.getTime();
-    SimpleDateFormat formatBR = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"); 
-    String dataFormatada = formatBR.format(dataAtul);
-    return dataFormatada;
+    DateFormat dataFormatada = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+    Date data = new Date();
+    return dataFormatada.format(data);
 }
 public static String codigoCriar(){
     int soma = 0;
@@ -372,5 +370,15 @@ public static boolean codigoValidar(String codigo){
     somafinal *= 2;
 
     return soma == somafinal;
+}
+public static String formatarDocumento(String documento){
+    if(documento.length() == 11){
+    documento = documento.replaceAll("[^0-9]", "");
+    documento = documento.replaceAll("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4");
+    } else if(documento.length() == 14){
+    documento = documento.replaceAll("[^0-9]", "");
+    documento = documento.replaceAll("(\\d{2})(\\d{3})(\\d{3})(\\d{4})(\\d{2})", "$1.$2.$3/$4-$5");
+    }
+    return documento;
 }
 }
