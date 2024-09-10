@@ -14,6 +14,8 @@ public class Main{
     public static String cpf = ""; 
     public static String cnpj = "";
     public static void main(String[] args) {
+        codigoCriar();
+
         //Inciar essenciais e listas
         List<Estoque> estoque = new ArrayList<>();
         List<Carrinho> carrinho = new ArrayList<>();
@@ -326,37 +328,49 @@ public static String dataCorrigida(){
 }
 public static String codigoCriar(){
     int soma = 0;
+    int somafinal = 0;
     Random rng = new Random();
     StringBuilder sb = new StringBuilder();
     int[] numbers = new int[9];
 
     do{
         soma = 0;
+        somafinal = 0;
         for(int i = 0; i < numbers.length; i++){
             numbers[i] = rng.nextInt(10);
             soma += numbers[i];
+            if(i >= 7){
+                somafinal += numbers[i]; 
+            }
         }
-    } while (soma != 25);
+        somafinal *= 2;
+    } while (soma != somafinal);
 
     for(int num : numbers){
         sb.append(num);
     }
-    
     String codigoCriado = sb.toString();
 
     return codigoCriado;
 }
 public static boolean codigoValidar(String codigo){
-    int soma = 0;
-    codigo.trim();
-    for(char num : codigo.toCharArray()){
-        soma += Character.getNumericValue(num);
-    }
-
-    if(soma == 25){
-        return true;
-    } else {
+    if(codigo.length() != 9){
         return false;
     }
+
+    int soma = 0;
+    int somafinal = 0;
+
+    codigo.trim();
+    for(int i = 0; i < codigo.length(); i++){
+        int num = Character.getNumericValue(codigo.charAt(i));
+        soma += num;
+        if(i >= 7){
+            somafinal += num;
+        }
+    }
+    somafinal *= 2;
+
+    return soma == somafinal;
 }
 }
