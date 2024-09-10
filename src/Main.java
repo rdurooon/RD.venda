@@ -66,7 +66,11 @@ public class Main{
             listCliente.add(cliente = new PessoaJ(0, nome, email, 5000, cnpj));
         }
         
-        System.out.println("\n- Bem vindo " + nome + "\n- Saldo: " + cliente.getSaldo());
+        System.out.println("\n- Bem vindo " + nome + "\n- Saldo: " + cliente.getSaldo() + "\n\n| Cupons disponíveis:");
+        for(String cupom : cupons){
+            System.out.println("| " + cupom);
+        }
+
 
         do{
             System.out.print("\nO que deseja?\n| 1 - Adicionar item\n| 2 - Remover item\n| 3 - Ver carrinho\n| 4 - Ver estoque\n| 5 - Efetuar compra\n| 6 - Validar nota fiscal\n| 0 - Sair\nInsira o que deseja: ");
@@ -230,6 +234,25 @@ public class Main{
                     total += show.getProduto().getPreco() * show.getQuant();
                 }
                 System.out.println("| Total: R$ " + total);
+                System.out.print("\nDeseja adicionar cupom?:\n| 1 - Sim\n| 2 - Não\nInsira o que deseja: ");
+                boolean usoCupom = false;
+                while(true){
+                    inputNum = scan.nextInt();
+                    switch (inputNum) {
+                        case 1:
+                            System.out.print("Insira o cupom: ");
+                            String cupom = scan.nextLine();
+                            cupom = scan.next();
+                            usoCupom = usarCumpom(cupom, cupons);
+                            break;
+                        case 2:
+                            break;
+                        default:
+                            System.out.print("Insira um valor valido!: ");
+                        }
+                break;
+                }
+
                 while(true){
                 System.out.print("Deseja comprar?\n| 1 - Sim\n| 2 - Não\nInsira o que deseja: ");
                 inputNum = scan.nextInt();
@@ -239,7 +262,10 @@ public class Main{
                                 System.out.println("Você não tem saldo para compra :(");
                                 break;
                             }
-
+                            if(usoCupom){
+                                total = (total * 100)/200;
+                            }
+                            
                             emitirNota(carrinho, cliente, total);
 
                             carrinho.clear();
@@ -318,6 +344,17 @@ public static void addCupons(List<String> cupons){
         }
         cupons.add(sb.toString());
     }
+}
+public static boolean usarCumpom(String cupom, List<String> cupons){
+    for(int i = 0; i < cupons.size(); i++){
+        if(cupons.get(i).equals(cupom)){
+            cupons.remove(i);
+            System.out.println("Cupom " + cupom + " utilizado!\n");
+            return true;
+        }
+    }
+    System.out.println("Não foi possível achar cupom :(\n");
+    return false;
 }
 public static void emitirNota(List<Carrinho> carrinho, Cliente cliente, double total){
     try {
