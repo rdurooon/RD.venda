@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
 import java.util.Random;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -236,12 +237,13 @@ public class Main{
                 System.out.println("| Total: R$ " + total);
                 System.out.print("\nDeseja adicionar cupom?:\n| 1 - Sim\n| 2 - Não\nInsira o que deseja: ");
                 boolean usoCupom = false;
+                String cupom = "";
                 while(true){
                     inputNum = scan.nextInt();
                     switch (inputNum) {
                         case 1:
                             System.out.print("Insira o cupom: ");
-                            String cupom = scan.nextLine();
+                            cupom = scan.nextLine();
                             cupom = scan.next();
                             usoCupom = usarCumpom(cupom, cupons);
                             break;
@@ -263,6 +265,10 @@ public class Main{
                             }
                             if(cliente.getSaldo() < total){
                                 System.out.println("Você não tem saldo para compra :(");
+                                if(usoCupom){
+                                    System.out.println("Cupom utilizado retornado!");
+                                    cupons.add(cupom);
+                                }
                                 break;
                             }
                             
@@ -357,21 +363,33 @@ public static boolean usarCumpom(String cupom, List<String> cupons){
     return false;
 }
 public static void emitirNota(List<Carrinho> carrinho, Cliente cliente, double total){
+    File pasta = new File("Notas fiscais");
+    if(!pasta.exists()){
+        pasta.mkdirs();
+    }
+
+    File nota;
+    int cont = 0;
+    do{
+        nota = new File(pasta, "notafiscal" + cont + ".txt");
+        cont++;
+    } while(nota.exists());
+
     try {
-        FileWriter nota = new FileWriter("notafiscal.txt");
+        FileWriter notaFiscal = new FileWriter(nota);
         //Emitir nota fiscal
-        nota.write("|| Nota fiscal:\n| Cliente: " + cliente.getNome() + "\n");
+        notaFiscal.write("|| Nota fiscal:\n| Cliente: " + cliente.getNome() + "\n");
         if(!cpf.equals("")){
-            nota.write("| CPF: " + cliente.getDocumento());
+            notaFiscal.write("| CPF: " + cliente.getDocumento());
         } else {
-            nota.write("| CNPJ: " + cliente.getDocumento());
+            notaFiscal.write("| CNPJ: " + cliente.getDocumento());
         }
-        nota.write("\n| Email: " + cliente.getEmail() + "\n\nItens comprados: ");
+        notaFiscal.write("\n| Email: " + cliente.getEmail() + "\n\nItens comprados: ");
         for(Carrinho show : carrinho){
-            nota.write("\n| " + show.getProduto().getProduto() + " | " + show.getQuant() + "x |");
+            notaFiscal.write("\n| " + show.getProduto().getProduto() + " | " + show.getQuant() + "x |");
         }
-        nota.write("\n| Total: R$ " + total + "\n\nEmitido em: " + dataCorrigida() + " || Código: " + codigoCriar() +"\n\n[Sitema de Vendas] feito por @rdurooon");
-        nota.close();
+        notaFiscal.write("\n| Total: R$ " + total + "\n\nEmitido em: " + dataCorrigida() + " || Código: " + codigoCriar() +"\n\n[Sitema de Vendas] feito por @rdurooon");
+        notaFiscal.close();
     } catch (IOException e) {
         e.printStackTrace();
     }
