@@ -258,12 +258,12 @@ public class Main{
                 inputNum = scan.nextInt();
                     switch (inputNum) {
                         case 1:
+                            if(usoCupom){
+                                total /= 2;
+                            }
                             if(cliente.getSaldo() < total){
                                 System.out.println("Você não tem saldo para compra :(");
                                 break;
-                            }
-                            if(usoCupom){
-                                total = (total * 100)/200;
                             }
                             
                             emitirNota(carrinho, cliente, total);
@@ -399,13 +399,11 @@ public static String codigoCriar(){
             }
         }
         somafinal *= 3;
-        System.out.println(soma + " | " + somafinal);
     } while (soma != somafinal);
 
     for(int num : numbers){
         sb.append(num);
     }
-    System.out.println(sb.toString());
     return sb.toString();
 }
 public static boolean codigoValidar(String codigo){
@@ -428,6 +426,7 @@ public static boolean codigoValidar(String codigo){
     return soma == somafinal * 3;
 }
 public static String formatarDocumento(String documento){
+    documento = documento.replaceAll("[.,-/]","");
     if(documento.length() == 11){
     documento = documento.replaceAll("[^0-9]", "");
     documento = documento.replaceAll("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4");
