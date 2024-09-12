@@ -20,7 +20,7 @@ public class Main{
         List<Estoque> estoque = new ArrayList<>();
         List<Carrinho> carrinho = new ArrayList<>();
         List<Cliente> listCliente = new ArrayList<>();
-        List<String> cupons = new ArrayList<>();
+        List<Cupom> cupons = new ArrayList<>();
         Cliente cliente;
         int count = 0;
         int total = 0;
@@ -68,7 +68,7 @@ public class Main{
         }
         
         System.out.println("\n- Bem vindo " + nome + "\n- Saldo: " + cliente.getSaldo() + "\n\n| Cupons disponíveis:");
-        for(String cupom : cupons){
+        for(Cupom cupom : cupons){
             System.out.println("| " + cupom);
         }
 
@@ -261,13 +261,20 @@ public class Main{
                     switch (inputNum) {
                         case 1:
                             if(usoCupom){
-                                total /= 2;
+                                for(Cupom cupomUsado : cupons){
+                                    if(cupom.equals(cupomUsado.getCupom())){
+                                        total -= total * (cupomUsado.getDesconto()/100);
+                                        cupons.remove(cupomUsado);
+                                        break;
+                                    }
+                                }
                             }
                             if(cliente.getSaldo() < total){
                                 System.out.println("Você não tem saldo para compra :(");
                                 if(usoCupom){
+                                    Random rng = new Random();
                                     System.out.println("Cupom utilizado retornado!");
-                                    cupons.add(cupom);
+                                    cupons.add(new Cupom(cupom, ((rng.nextInt(7) + 2) * 10)));
                                 }
                                 break;
                             }
@@ -334,7 +341,7 @@ public static void addItens(List<Estoque> estoque){
     est = new Estoque(10, "Gabinete Vidro Temperado", 310, 28);
     estoque.add(est);
 }
-public static void addCupons(List<String> cupons){
+public static void addCupons(List<Cupom> cupons){
     Random rng = new Random();
     StringBuilder sb = new StringBuilder();
     
@@ -348,13 +355,14 @@ public static void addCupons(List<String> cupons){
                 sb.append(letra);
             }
         }
-        cupons.add(sb.toString());
+        int desc = rng.nextInt(7) + 2;
+        desc *= 10;
+        cupons.add(new Cupom(sb.toString(), desc));
     }
 }
-public static boolean usarCumpom(String cupom, List<String> cupons){
+public static boolean usarCumpom(String cupom, List<Cupom> cupons){
     for(int i = 0; i < cupons.size(); i++){
-        if(cupons.get(i).equals(cupom)){
-            cupons.remove(i);
+        if(cupom.equals(cupons.get(i).getCupom())){
             System.out.println("Cupom " + cupom + " utilizado!\n");
             return true;
         }
