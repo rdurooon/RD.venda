@@ -14,6 +14,7 @@ public class Main{
     public static Scanner scan = new Scanner(System.in);
     public static String cpf = ""; 
     public static String cnpj = "";
+    public static Random rng = new Random();
     public static void main(String[] args) {
         
         //Inciar essenciais e listas
@@ -83,7 +84,7 @@ public class Main{
                 System.out.println("\nQual deste itens deseja adicionar?: ");
                 for(Estoque show : estoque){
                     if(show.getQuant() > 0){
-                    System.out.println("| " + show.getId() + " | " +  show.getProduto() + " | R$ " + show.getPreco() + " | " + show.getQuant());
+                    System.out.printf("| %d | %-30s | R$ %.2f | %dx\n", show.getId(), show.getProduto(), show.getPreco(), show.getQuant());
                     }
                 }
                     
@@ -272,7 +273,6 @@ public class Main{
                             if(cliente.getSaldo() < total){
                                 System.out.println("Você não tem saldo para compra :(");
                                 if(usoCupom){
-                                    Random rng = new Random();
                                     System.out.println("Cupom utilizado retornado!");
                                     cupons.add(new Cupom(cupom, ((rng.nextInt(7) + 2) * 10)));
                                 }
@@ -342,7 +342,6 @@ public static void addItens(List<Estoque> estoque){
     estoque.add(est);
 }
 public static void addCupons(List<Cupom> cupons){
-    Random rng = new Random();
     StringBuilder sb = new StringBuilder();
     
     for(int x = 0; x < 3; x++){
@@ -410,7 +409,6 @@ public static String dataCorrigida(){
 public static String codigoCriar(){
     int soma = 0;
     int somafinal = 0;
-    Random rng = new Random();
     StringBuilder sb = new StringBuilder();
     int[] numbers = new int[9];
 
