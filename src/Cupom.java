@@ -1,7 +1,7 @@
 public class Cupom {
     private String cupom;
     private double desconto;
-    
+
     public Cupom(String cupom, double desconto) {
         this.cupom = cupom;
         this.desconto = desconto;
@@ -24,7 +24,7 @@ public class Cupom {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return this.cupom + " | Desconto de " + this.desconto + "%";
     }
 }
