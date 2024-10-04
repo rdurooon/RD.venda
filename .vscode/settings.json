@@ -4,9 +4,6 @@
     ],
     "java.project.outputPath": "bin",
     "java.project.referencedLibraries": [
-        "lib/**/*.jar",
-        "c:\\Users\\thebo\\Downloads\\efhuiolas\\javax.mail.jar",
-        "c:\\Users\\thebo\\Downloads\\efhuiolas\\javax.mail-api-1.6.2.jar",
-        "c:\\Users\\thebo\\Downloads\\efhuiolas\\activation.jar"
+        "lib/**/*.jar"
     ]
 }

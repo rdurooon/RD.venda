@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import javax.mail.internet.*;
 
 public class Main {
     private static Scanner scan = new Scanner(System.in);
@@ -42,9 +43,16 @@ public class Main {
                 System.out.print("\nOlá! Cadastre-se para utilizar nosso sistema:\n| Nome: ");
                 nome = scan.nextLine();
                 System.out.print("| Email: ");
-                email = scan.nextLine();
-                if (email.equals("")) {
-                    email = "generic@email.com";
+                boolean emailValidar = false;
+                while(!emailValidar){
+                    email = scan.nextLine().trim();
+                    if (email.equals("") || email.isEmpty()) {
+                        System.out.print("Insira um email!: ");
+                    } else if(validarEmail(email)){
+                        emailValidar = true;
+                    } else {
+                        System.out.print("Insir um email válido!: ");
+                    }
                 }
                 System.out.print("| Você uma pessoa:\n! 1 - Física\n| 2 - Jurídica\nInsira o que deseja: ");
 
@@ -504,4 +512,15 @@ public class Main {
         }
         return documento;
     }
+
+    public static boolean validarEmail(String email){
+        boolean validacao = true;
+        try {
+            InternetAddress emailValidacao = new InternetAddress(email);
+            emailValidacao.validate();
+        } catch (AddressException ex) {
+            validacao = false;
+        }
+        return validacao;
+    } 
 }
