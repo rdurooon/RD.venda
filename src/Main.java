@@ -11,13 +11,13 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 public class Main {
-    public static Scanner scan = new Scanner(System.in);
-    public static String cpf = "";
-    public static String cnpj = "";
-    public static Random rng = new Random();
+    private static Scanner scan = new Scanner(System.in);
+    private static String cpf = "";
+    private static String cnpj = "";
+    private static Random rng = new Random();
+    private static String email = "";
 
     public static void main(String[] args) {
-
         // Inciar essenciais e listas
         List<Estoque> estoque = new ArrayList<>();
         List<Carrinho> carrinho = new ArrayList<>();
@@ -25,7 +25,6 @@ public class Main {
         List<Cupom> cupons = new ArrayList<>();
         Cliente cliente;
         String nome = "";
-        String email = "";
         int count = 0;
         int total = 0;
         int quant = 0;
@@ -34,6 +33,7 @@ public class Main {
         // Adicionar itens ao estoque e cupons
         addItens(estoque);
         addCupons(cupons);
+        descontoEstoque(estoque);
 
         // Inicio
         // Cadastro de usuário
@@ -302,8 +302,8 @@ public class Main {
                                         carrinho.clear();
                                         cliente.rmSaldo(total);
                                         System.out.printf(
-                                                "\nCompra efetuado com sucesso!\nNota fiscal enviada ao email '%s'\nSaldo restante: %.2f \n",
-                                                cliente.getEmail(), cliente.getSaldo());
+                                                "Compra efetuado com sucesso!\nSaldo restante: %.2f \n",
+                                                cliente.getSaldo());
 
                                         break;
                                     case 2:
@@ -367,6 +367,16 @@ public class Main {
         estoque.add(est);
         est = new Estoque(10, "Gabinete Vidro Temperado", 310, 28);
         estoque.add(est);
+
+    }
+    public static void descontoEstoque(List<Estoque> estoque){
+        int sort = rng.nextInt(estoque.size());
+        double item = estoque.get(sort).getPreco();
+        double desc = (rng.nextInt(5)+1) * 10;
+        desc = item * desc / 100;
+        item -= desc; 
+
+        estoque.get(sort).setPreco(item);
     }
 
     public static void addCupons(List<Cupom> cupons) {
@@ -426,6 +436,7 @@ public class Main {
             notaFiscal.write("\n| Total: R$ " + total + "\n\nEmitido em: " + dataCorrigida() + " || Código: "
                     + codigoCriar() + "\n\n[Sitema de Vendas] feito por @rdurooon");
             notaFiscal.close();
+            Email.enviarEmail(nota, email, "Nota fiscal!", "Você recebeu a nota fiscal. Obrigado por utilizar nosso sistema :)");
         } catch (IOException e) {
             e.printStackTrace();
         }
