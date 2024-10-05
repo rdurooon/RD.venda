@@ -432,7 +432,7 @@ public class Main {
         File nota;
         int cont = 0;
         do {
-            nota = new File(pasta, "notafiscal" + cont + ".txt");
+            nota = new File(pasta, "notafiscal" + (cont+1) + ".txt");
             cont++;
         } while (nota.exists());
 
@@ -449,11 +449,10 @@ public class Main {
             for (Carrinho show : carrinho) {
                 notaFiscal.write("\n| " + show.getProduto().getProduto() + " | " + show.getQuant() + "x |");
             }
-            notaFiscal.write("\n| Total: R$ " + total + "\n\nEmitido em: " + dataCorrigida() + " || Código: "
-                    + codigoCriar() + "\n\n[Sitema de Vendas] feito por @rdurooon");
+            notaFiscal.write("\n| Total: R$ " + total + "\n\nEmitido em: " + dataCorrigida() + "\n| Código: "
+                    + codigoCriar() + "\n\n[Sistema de Vendas] feito por @rdurooon");
             notaFiscal.close();
-            Email.enviarEmail(nota, email, "Nota fiscal!",
-                    "Olá " + nome + "!\nVocê recebeu uma nota fiscal. Obrigado por utilizar nosso sistema :)");
+            Email.enviarEmail(nota, email, "Nota fiscal!", "Olá " + nome + "!\nObrigado por utilizar nosso sistema :)\nVocê recebeu sua nota fiscal. Você verificar sua autenticidade em nosso sistema.\n\nSegue sua nota em anexo:");
         } catch (IOException e) {
             e.printStackTrace();
         }

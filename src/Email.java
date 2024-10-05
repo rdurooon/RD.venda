@@ -62,11 +62,13 @@ public class Email {
                 // Parte 4: Enviar email
                 Transport.send(mensagem);
                 System.out.println("Email enviado com sucesso!\n");
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+            } catch (MessagingException e) {
+                System.err.println("❌ Erro ao compor ou enviar e-mail: " + e.getMessage());
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("⚠ Erro ao carregar arquivo 'config.properties': " + e.getMessage());
+        } catch (Exception e){
+            System.err.println("⚠ Erro inesperado: " + e.getMessage());
         }
     }
 }
