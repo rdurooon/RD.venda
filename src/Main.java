@@ -17,6 +17,7 @@ public class Main {
     private static String cnpj = "";
     private static Random rng = new Random();
     private static String email = "";
+    private static String nome = "";
 
     public static void main(String[] args) {
         // Inciar essenciais e listas
@@ -25,7 +26,6 @@ public class Main {
         List<Cliente> listCliente = new ArrayList<>();
         List<Cupom> cupons = new ArrayList<>();
         Cliente cliente;
-        String nome = "";
         int count = 0;
         int total = 0;
         int quant = 0;
@@ -38,20 +38,20 @@ public class Main {
 
         // Inicio
         // Cadastro de usuário
-        while(true){
-            try{
+        while (true) {
+            try {
                 System.out.print("\nOlá! Cadastre-se para utilizar nosso sistema:\n| Nome: ");
                 nome = scan.nextLine();
                 System.out.print("| Email: ");
                 boolean emailValidar = false;
-                while(!emailValidar){
+                while (!emailValidar) {
                     email = scan.nextLine().trim();
                     if (email.equals("") || email.isEmpty()) {
                         System.out.print("Insira um email!: ");
-                    } else if(validarEmail(email)){
+                    } else if (validarEmail(email)) {
                         emailValidar = true;
                     } else {
-                        System.out.print("Insir um email válido!: ");
+                        System.out.print("Insira um email válido!: ");
                     }
                 }
                 System.out.print("| Você uma pessoa:\n! 1 - Física\n| 2 - Jurídica\nInsira o que deseja: ");
@@ -75,7 +75,7 @@ public class Main {
                     }
                 } while (inputNum != 1 && inputNum != 2);
                 break;
-            } catch (InputMismatchException e){
+            } catch (InputMismatchException e) {
                 System.out.println("Erro de input!");
                 scan.nextLine();
             }
@@ -91,8 +91,8 @@ public class Main {
         for (Cupom cupom : cupons) {
             System.out.println("| " + cupom);
         }
-        while(true){
-            try{
+        while (true) {
+            try {
                 do {
                     System.out.print(
                             "\nO que deseja?\n| 1 - Adicionar item\n| 2 - Remover item\n| 3 - Ver carrinho\n| 4 - Ver estoque\n| 5 - Efetuar compra\n| 6 - Validar nota fiscal\n| 0 - Sair\nInsira o que deseja: ");
@@ -139,7 +139,8 @@ public class Main {
                                         if (busca.getId() == carrinho.get(i).getProduto().getId() && !finaled) {
                                             carrinho.get(i).addQuant(quant);
                                             busca.rmQuant(quant);
-                                            System.out.println("\nX " + busca.getProduto() + " acrescentado ao carrinho!");
+                                            System.out.println(
+                                                    "\nX " + busca.getProduto() + " acrescentado ao carrinho!");
                                             add = true;
                                             break;
                                         }
@@ -231,7 +232,8 @@ public class Main {
                             for (Carrinho show : carrinho) {
                                 count++;
                                 System.out.println(
-                                        "| " + count + " | " + show.getProduto().getProduto() + " | " + show.getQuant() + "x");
+                                        "| " + count + " | " + show.getProduto().getProduto() + " | " + show.getQuant()
+                                                + "x");
                                 total += show.getProduto().getPreco() * show.getQuant();
                             }
                             System.out.println("| Total: R$ " + total);
@@ -240,11 +242,14 @@ public class Main {
                         case 4:
                             // Mostrar estoque
                             System.out
-                                    .println("Esses são os itens do estoque:\n===============================================");
+                                    .println(
+                                            "Esses são os itens do estoque:\n===============================================");
                             for (Estoque show : estoque) {
                                 System.out.println(
-                                        "| Nome: " + show.getProduto() + "\n| Preço: R$ " + show.getPreco() + "\n| Quantidade: "
-                                                + show.getQuant() + "x\n===============================================");
+                                        "| Nome: " + show.getProduto() + "\n| Preço: R$ " + show.getPreco()
+                                                + "\n| Quantidade: "
+                                                + show.getQuant()
+                                                + "x\n===============================================");
                             }
 
                             break;
@@ -258,7 +263,8 @@ public class Main {
                             System.out.println("Esses são os itens presente no seu carrinho: ");
                             total = 0;
                             for (Carrinho show : carrinho) {
-                                System.out.println("| " + show.getProduto().getProduto() + " | " + show.getQuant() + "x");
+                                System.out
+                                        .println("| " + show.getProduto().getProduto() + " | " + show.getQuant() + "x");
                                 total += show.getProduto().getPreco() * show.getQuant();
                             }
                             System.out.println("| Total: R$ " + total);
@@ -332,7 +338,8 @@ public class Main {
                             if (codigoValidar(codigo)) {
                                 System.out.println("O código é valido!");
                             } else {
-                                System.out.println("O código é invalido. Entre em cotado conosco para averiguar compra!");
+                                System.out
+                                        .println("O código é invalido. Entre em cotado conosco para averiguar compra!");
                             }
 
                             break;
@@ -347,7 +354,7 @@ public class Main {
                     }
                 } while (inputNum != -1);
                 break;
-            } catch (InputMismatchException e){
+            } catch (InputMismatchException e) {
                 System.out.println("Erro de input!");
                 scan.nextLine();
             }
@@ -377,12 +384,13 @@ public class Main {
         estoque.add(est);
 
     }
-    public static void descontoEstoque(List<Estoque> estoque){
+
+    public static void descontoEstoque(List<Estoque> estoque) {
         int sort = rng.nextInt(estoque.size());
         double item = estoque.get(sort).getPreco();
-        double desc = (rng.nextInt(5)+1) * 10;
+        double desc = (rng.nextInt(5) + 1) * 10;
         desc = item * desc / 100;
-        item -= desc; 
+        item -= desc;
 
         estoque.get(sort).setPreco(item);
     }
@@ -400,7 +408,7 @@ public class Main {
                     sb.append(letra);
                 }
             }
-            cupons.add(new Cupom(sb.toString(), ((rng.nextInt(7)+2) * 10)));
+            cupons.add(new Cupom(sb.toString(), ((rng.nextInt(7) + 2) * 10)));
         }
     }
 
@@ -444,7 +452,8 @@ public class Main {
             notaFiscal.write("\n| Total: R$ " + total + "\n\nEmitido em: " + dataCorrigida() + " || Código: "
                     + codigoCriar() + "\n\n[Sitema de Vendas] feito por @rdurooon");
             notaFiscal.close();
-            Email.enviarEmail(nota, email, "Nota fiscal!", "Você recebeu a nota fiscal. Obrigado por utilizar nosso sistema :)");
+            Email.enviarEmail(nota, email, "Nota fiscal!",
+                    "Olá " + nome + "!\nVocê recebeu uma nota fiscal. Obrigado por utilizar nosso sistema :)");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -497,7 +506,6 @@ public class Main {
                 somafinal += num;
             }
         }
-
         return soma == somafinal * 3;
     }
 
@@ -513,7 +521,7 @@ public class Main {
         return documento;
     }
 
-    public static boolean validarEmail(String email){
+    public static boolean validarEmail(String email) {
         boolean validacao = true;
         try {
             InternetAddress emailValidacao = new InternetAddress(email);
@@ -522,5 +530,5 @@ public class Main {
             validacao = false;
         }
         return validacao;
-    } 
+    }
 }
