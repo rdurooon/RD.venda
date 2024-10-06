@@ -3,6 +3,7 @@ public class Estoque {
     private String produto;
     private double preco;
     private int quant;
+    private boolean descontado;
 
     public Estoque(int id, String produto, double preco, int quant) {
         this.id = id;
@@ -35,6 +36,11 @@ public class Estoque {
         this.preco = preco;
     }
 
+    public void setPreco(double preco, boolean descontado){
+        this.preco = preco;
+        this.descontado = descontado;
+    }
+
     public int getQuant() {
         return quant;
     }
@@ -43,6 +49,10 @@ public class Estoque {
         this.quant = quant;
     }
 
+    public boolean isDescontado() {
+        return descontado;
+    }
+    
     public void rmQuant(int quant) {
         this.quant -= quant;
     }

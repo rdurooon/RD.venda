@@ -42,6 +42,7 @@ public class Email {
 
             // Criar email
             try {
+                System.out.println("\nProcessando...");
                 // Parte 1: Destinatário e Assunto
                 Message mensagem = new MimeMessage(sessao);
                 mensagem.setFrom(new InternetAddress(email, "Sistema de Venda"));
@@ -61,7 +62,7 @@ public class Email {
                 mensagem.setContent(unir);
                 // Parte 4: Enviar email
                 Transport.send(mensagem);
-                System.out.println("Email enviado com sucesso!\n");
+                System.out.println("\nEmail enviado com sucesso!");
             } catch (MessagingException e) {
                 System.err.println("❌ Erro ao compor ou enviar e-mail: " + e.getMessage());
             }

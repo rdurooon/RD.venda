@@ -104,9 +104,14 @@ public class Main {
                             System.out.println("\nQual deste itens deseja adicionar?: ");
                             for (Estoque show : estoque) {
                                 if (show.getQuant() > 0) {
-                                    System.out.printf("| %d | %-30s | R$ %.2f | %dx\n", show.getId(), show.getProduto(),
+                                    if(show.isDescontado() == true){
+                                        System.out.printf("| %d | %-30s | R$ %.2f | %dx | Esse item sofreu desconto!\n", show.getId(), show.getProduto(),
                                             show.getPreco(), show.getQuant());
-                                }
+                                        } else {
+                                        System.out.printf("| %d | %-30s | R$ %.2f | %dx |\n", show.getId(), show.getProduto(),
+                                                show.getPreco(), show.getQuant());
+                                        }
+                                    }
                             }
 
                             System.out.print("Insira o que deseja: ");
@@ -392,7 +397,7 @@ public class Main {
         desc = item * desc / 100;
         item -= desc;
 
-        estoque.get(sort).setPreco(item);
+        estoque.get(sort).setPreco(item, false);
     }
 
     public static void addCupons(List<Cupom> cupons) {
