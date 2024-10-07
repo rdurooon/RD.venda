@@ -1,3 +1,4 @@
+import java.awt.AWTException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -12,7 +13,7 @@ public class Email {
         File arqConfig = new File("config.properties");
         // Verificar existencia de "config.properties"
         if (!arqConfig.exists()) {
-            System.out.println("'config.properties' não encontrado\n");
+            System.out.println("\n'config.properties' não encontrado");
             return;
         }
         // Carregar dados do "config.properties"
@@ -22,7 +23,7 @@ public class Email {
             String senha = prop.getProperty("senha");
             // Se não houver email e senha, retornar null
             if (email == null || senha == null || email.isEmpty() || senha.isEmpty()) {
-                System.out.println("Credenciais não encontrados!\n");
+                System.out.println("\nCredenciais no 'config.properties' não encontrados!");
                 return;
             }
             // Carregar dados do serviço de email
@@ -63,13 +64,16 @@ public class Email {
                 // Parte 4: Enviar email
                 Transport.send(mensagem);
                 System.out.println("\nEmail enviado com sucesso!");
+                new Notificacao("Sistema de Vendas", "E-mail enviado ao destinatário: " + receptor);
             } catch (MessagingException e) {
-                System.err.println("❌ Erro ao compor ou enviar e-mail: " + e.getMessage());
+                System.err.println("\n❌ Erro ao compor ou enviar e-mail: " + e.getMessage());
+            } catch (AWTException e){
+                System.err.println("\n❌ Erro ao notificar usuário!: " + e.getMessage());
             }
         } catch (IOException e) {
-            System.err.println("⚠ Erro ao carregar arquivo 'config.properties': " + e.getMessage());
+            System.err.println("\n⚠ Erro ao carregar arquivo 'config.properties': " + e.getMessage());
         } catch (Exception e){
-            System.err.println("⚠ Erro inesperado: " + e.getMessage());
+            System.err.println("\n⚠ Erro inesperado: " + e.getMessage());
         }
     }
 }

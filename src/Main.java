@@ -20,6 +20,8 @@ public class Main {
     private static String nome = "";
 
     public static void main(String[] args) {
+
+       
         // Inciar essenciais e listas
         List<Estoque> estoque = new ArrayList<>();
         List<Carrinho> carrinho = new ArrayList<>();
@@ -104,7 +106,7 @@ public class Main {
                             System.out.println("\nQual deste itens deseja adicionar?: ");
                             for (Estoque show : estoque) {
                                 if (show.getQuant() > 0) {
-                                    if(show.isDescontado() == true){
+                                    if(show.isDescontado()){
                                         System.out.printf("| %d | %-30s | R$ %.2f | %dx | Esse item sofreu desconto!\n", show.getId(), show.getProduto(),
                                             show.getPreco(), show.getQuant());
                                         } else {
@@ -457,7 +459,7 @@ public class Main {
             notaFiscal.write("\n| Total: R$ " + total + "\n\nEmitido em: " + dataCorrigida() + "\n| Código: "
                     + codigoCriar() + "\n\n[Sistema de Vendas] feito por @rdurooon");
             notaFiscal.close();
-            Email.enviarEmail(nota, email, "Nota fiscal!", "Olá " + nome + "!\nObrigado por utilizar nosso sistema :)\nVocê recebeu sua nota fiscal. Você verificar sua autenticidade em nosso sistema.\n\nSegue sua nota em anexo:");
+            Email.enviarEmail(nota, email, "Nota fiscal!", "Olá " + nome + "!\nObrigado por utilizar nosso sistema :)\nVocê recebeu sua nota fiscal. Você pode verificar sua autenticidade em nosso sistema.\n\nSegue sua nota em anexo:");
         } catch (IOException e) {
             e.printStackTrace();
         }
