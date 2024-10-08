@@ -21,7 +21,6 @@ public class Main {
 
     public static void main(String[] args) {
 
-       
         // Inciar essenciais e listas
         List<Estoque> estoque = new ArrayList<>();
         List<Carrinho> carrinho = new ArrayList<>();

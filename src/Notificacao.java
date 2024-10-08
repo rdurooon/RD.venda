@@ -1,8 +1,13 @@
 import java.awt.*;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.awt.TrayIcon.MessageType;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
 
 public class Notificacao {
-    public Notificacao(String titulo, String mensagem) throws AWTException {
+    public Notificacao(String titulo, String mensagem) throws AWTException, IOException {
         if(SystemTray.isSupported()){
             displayNoti(titulo, mensagem);
         } else {
@@ -10,16 +15,24 @@ public class Notificacao {
         }
     }
 
-    public void displayNoti(String titulo, String mensagem) throws AWTException{
+    public void displayNoti(String titulo, String mensagem) throws AWTException, IOException{
         SystemTray tray = SystemTray.getSystemTray();
 
-        Image imagem = Toolkit.getDefaultToolkit().createImage("icon.png");
-        TrayIcon icon = new TrayIcon(imagem, "teste");
+        BufferedImage imagem = ImageIO.read(new File("icon.png"));
+        TrayIcon noti = new TrayIcon(imagem, "imagem");
 
-        icon.setImageAutoSize(true);
-        icon.setToolTip("Sistema de notificação teste");
-        tray.add(icon);
+        noti.setImageAutoSize(true);
+        noti.setToolTip("imagem");
+        tray.add(noti);
 
-        icon.displayMessage(titulo, mensagem, MessageType.INFO);
+        noti.displayMessage(titulo, mensagem, MessageType.NONE);
+
+        noti.addActionListener(e -> {
+            try {
+                Desktop.getDesktop().browse(new URI("https://mail.google.com"));
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
     }
 }
